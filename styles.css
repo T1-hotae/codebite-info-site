@@ -1,0 +1,110 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: #131516;
+  color: #e8e8e8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── 스크롤바 ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1a1c1e; }
+::-webkit-scrollbar-thumb { background: #333537; border-radius: 3px; }
+
+/* ── 마크다운 테이블 ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 14px;
+}
+th {
+  background: #1e2022;
+  color: #58CC02;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 2px solid #2a2d30;
+  font-weight: 600;
+}
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #242628;
+  vertical-align: top;
+  line-height: 1.5;
+}
+td a { color: #58CC02; text-decoration: none; font-size: 13px; }
+td a:hover { text-decoration: underline; }
+tr:hover td { background: #1a1c1e; }
+
+/* ── 마크다운 헤딩 ── */
+h2 {
+  color: #58CC02;
+  font-size: 18px;
+  margin: 28px 0 10px;
+  border-left: 3px solid #58CC02;
+  padding-left: 10px;
+}
+h3 { color: #ccc; font-size: 15px; margin: 20px 0 8px; }
+
+/* ── 리스트 ── */
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { line-height: 1.8; font-size: 14px; color: #c0c0c0; }
+
+/* ── 인용 ── */
+blockquote {
+  border-left: 3px solid #58CC02;
+  background: #1a2610;
+  padding: 10px 16px;
+  margin: 12px 0;
+  border-radius: 0 8px 8px 0;
+  color: #aaa;
+  font-size: 14px;
+}
+
+hr { border: none; border-top: 1px solid #242628; margin: 20px 0; }
+strong { color: #e0e0e0; }
+p { line-height: 1.7; font-size: 14px; color: #c0c0c0; margin: 8px 0; }
+
+/* ── 광고 카드 ── */
+.ad-card {
+  background: #1a1c1e;
+  border-radius: 16px;
+  padding: 24px 14px 20px;
+  border: 1px solid #242628;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+  cursor: default;
+}
+.ad-card:hover {
+  transform: translateY(-3px);
+  border-color: #3a3d42;
+}
+.ad-card-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+.ad-card-icon { font-size: 30px; margin-bottom: 10px; }
+.ad-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #e8e8e8;
+  margin-bottom: 8px;
+}
+.ad-card-desc {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.7;
+  white-space: pre-line;
+  margin-bottom: 10px;
+}
+.ad-card-cta {
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-block;
+}
