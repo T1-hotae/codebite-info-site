@@ -1,4 +1,4 @@
-const { useState, useCallback } = React;
+const { useState, useCallback, useEffect } = React;
 
 /* ════════════════════════════════════════════
    Button 컴포넌트 (React Native → Web 포팅)
@@ -773,18 +773,46 @@ function Footer({ onNavigate }) {
 }
 
 /* ════════════════════════════════════════════
+   해시 라우터
+   #/        → home
+   #/terms   → 이용약관
+   #/privacy → 개인정보처리방침
+   #/oss     → 오픈소스
+════════════════════════════════════════════ */
+const VALID_ROUTES = ["home", "terms", "privacy", "oss"];
+
+function getRouteFromHash() {
+  const raw = window.location.hash.replace(/^#\/?/, "") || "home";
+  return VALID_ROUTES.includes(raw) ? raw : "home";
+}
+
+function useHashRouter() {
+  const [route, setRoute] = useState(getRouteFromHash);
+
+  useEffect(() => {
+    const sync = () => {
+      setRoute(getRouteFromHash());
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
+
+  const navigate = useCallback((id) => {
+    window.location.hash = id === "home" ? "/" : `/${id}`;
+  }, []);
+
+  return { route, navigate };
+}
+
+/* ════════════════════════════════════════════
    App
 ════════════════════════════════════════════ */
 function App() {
-  const [tab, setTab] = useState("home");
-
-  const navigate = useCallback((id) => {
-    setTab(id);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  const { route, navigate } = useHashRouter();
 
   const renderContent = () => {
-    switch (tab) {
+    switch (route) {
       case "home":    return <HomeScreen onNavigate={navigate} />;
       case "terms":   return <DocScreen title="이용약관" content={TERMS_MD} onBack={() => navigate("home")} />;
       case "privacy": return <DocScreen title="개인정보 처리 방침" content={PRIVACY_MD} onBack={() => navigate("home")} />;
@@ -795,7 +823,7 @@ function App() {
 
   return (
     <>
-      <Header tab={tab} onNavigate={navigate} />
+      <Header tab={route} onNavigate={navigate} />
       <main style={{ flex: 1 }}>{renderContent()}</main>
       <Footer onNavigate={navigate} />
     </>
