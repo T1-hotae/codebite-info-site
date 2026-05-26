@@ -79,19 +79,21 @@ function renderMarkdown(md) {
       const parseRow = r => r.split("|").filter((_, idx, arr) => idx > 0 && idx < arr.length - 1).map(c => c.trim());
       const [header, ...body] = rows;
       elements.push(
-        <table key={key++}>
-          <thead><tr>{parseRow(header).map((h, ci) => <th key={ci}>{h}</th>)}</tr></thead>
-          <tbody>
-            {body.map((row, ri) => (
-              <tr key={ri}>
-                {parseRow(row).map((cell, ci) => {
-                  const urlMatch = cell.match(/https?:\/\/[^\s)]+/);
-                  return <td key={ci}>{urlMatch ? <a href={urlMatch[0]} target="_blank" rel="noreferrer">{cell}</a> : cell}</td>;
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div key={key++} className="table-wrap">
+          <table>
+            <thead><tr>{parseRow(header).map((h, ci) => <th key={ci}>{h}</th>)}</tr></thead>
+            <tbody>
+              {body.map((row, ri) => (
+                <tr key={ri}>
+                  {parseRow(row).map((cell, ci) => {
+                    const urlMatch = cell.match(/https?:\/\/[^\s)]+/);
+                    return <td key={ci}>{urlMatch ? <a href={urlMatch[0]} target="_blank" rel="noreferrer">{cell}</a> : cell}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
       continue;
     }
@@ -625,31 +627,29 @@ const AD_CARDS = [
 ════════════════════════════════════════════ */
 function HomeScreen({ onNavigate }) {
   return (
-    <div style={{ maxWidth: 640, margin: "0 auto", padding: "60px 24px", textAlign: "center" }}>
+    <div className="home-screen">
 
-      {/* 로고 — 투명 배경, 크게 */}
-      <div style={{ marginBottom: 40 }}>
-        <img
-          src="assets/logo.png"
-          alt="CodeBite"
-          style={{ height: 90, maxWidth: "100%", mixBlendMode: "screen" }}
-        />
+      {/* 로고 */}
+      <div style={{ marginBottom: 32 }}>
+        <img src="assets/logo.png" alt="CodeBite" className="logo-img" />
       </div>
 
-      <p style={{ fontSize: 17, color: "#999", marginBottom: 48, lineHeight: 1.7 }}>
+      <p className="home-tagline">
         코딩을 배우는 가장 쉬운 방법.<br />
         매일 퀴즈를 풀고 스트릭을 이어가세요.
       </p>
 
       {/* 광고식 특징 카드 */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 48 }}>
+      <div className="ad-cards-grid">
         {AD_CARDS.map(({ icon, title, desc, cta, accent }) => (
           <div key={title} className="ad-card">
             <div className="ad-card-accent" style={{ background: accent }} />
             <div className="ad-card-icon">{icon}</div>
-            <div className="ad-card-title">{title}</div>
-            <div className="ad-card-desc">{desc}</div>
-            <span className="ad-card-cta" style={{ color: accent }}>{cta}</span>
+            <div className="ad-card-body">
+              <div className="ad-card-title">{title}</div>
+              <div className="ad-card-desc">{desc}</div>
+              <span className="ad-card-cta" style={{ color: accent }}>{cta}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -661,7 +661,7 @@ function HomeScreen({ onNavigate }) {
         <Button label="구글로 시작하기" variant="outline" style={{ width: "100%" }} />
       </div>
 
-      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 28 }}>
+      <div className="home-ghost-links">
         <Button label="이용약관" variant="ghost" textStyle={{ fontSize: 13 }} onClick={() => onNavigate("terms")} />
         <span style={{ color: "#444", lineHeight: "36px" }}>·</span>
         <Button label="개인정보처리방침" variant="ghost" textStyle={{ fontSize: 13 }} onClick={() => onNavigate("privacy")} />
@@ -677,14 +677,12 @@ function HomeScreen({ onNavigate }) {
 ════════════════════════════════════════════ */
 function DocScreen({ title, content, onBack }) {
   return (
-    <div style={{ maxWidth: 780, margin: "0 auto", padding: "32px 24px 60px" }}>
-      <div style={{ marginBottom: 24 }}>
+    <div className="doc-screen">
+      <div style={{ marginBottom: 20 }}>
         <Button label="← 홈으로" variant="ghost" textStyle={{ fontSize: 14 }} onClick={onBack} />
       </div>
-      <div style={{ background: "#1a1c1e", borderRadius: 18, padding: "32px 36px", border: "1px solid #242628" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid #242628" }}>
-          {title}
-        </h1>
+      <div className="doc-inner">
+        <h1 className="doc-title">{title}</h1>
         <div>{renderMarkdown(content)}</div>
       </div>
       <div style={{ textAlign: "center", marginTop: 28 }}>
@@ -720,21 +718,16 @@ function Header({ tab, onNavigate }) {
           </span>
         </button>
 
-        <nav style={{ display: "flex", gap: 4 }}>
+        <nav style={{ display: "flex", gap: 2 }}>
           {TABS.slice(1).map(t => (
             <button
               key={t.id}
+              className="header-nav-btn"
               onClick={() => onNavigate(t.id)}
               style={{
                 background: tab === t.id ? "#1e3a10" : "none",
-                border: "none",
                 color: tab === t.id ? "#58CC02" : "#888",
-                fontSize: 13,
                 fontWeight: tab === t.id ? 700 : 400,
-                cursor: "pointer",
-                padding: "6px 12px",
-                borderRadius: 8,
-                transition: "all 0.15s",
               }}
             >
               {t.label}
